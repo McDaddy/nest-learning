@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "jwt-and-session",
+    "name": "nest-learning",
     "builds": [
         {
             "src": "dist/main.js",
