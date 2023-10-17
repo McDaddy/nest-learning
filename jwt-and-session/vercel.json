@@ -3,5 +3,5 @@
     "name": "nest-learning",
     "buildCommand": "pnpm build",
     "outputDirectory": "dist",
-    "devCommand": "pnpm dev"
+    "devCommand": "pnpm start"
 }
