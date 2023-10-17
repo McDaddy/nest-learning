@@ -1,0 +1,27 @@
+aaaa
+222
+sss
+aaaa
+阿萨大大是的
+
+[
+    {
+        type: 'success/error/unknown',
+        data: [
+            {
+             legend: 'L1',
+             data: {
+                value: 30,
+                name: 'apt1',
+             }[]
+            },
+            {
+             legend: 'L2',
+             data: {
+                value: 30,
+                name: 'apt2',
+             }[]
+            },
+        ]
+    },
+]
