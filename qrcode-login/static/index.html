@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>扫码登录</title>
+    <script src="https://unpkg.com/axios@1.5.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="login" class="m-6 flex flex-col items-center gap-4">
+      <div class="text-lg">阿外云扫码登录</div>
+      <img id="img" src="" alt="" />
+      <div id="info"></div>
+    </div>
+    <div id="content" class="flex items-center p-8 gap-4">
+      <div class="text-lg">
+        你好，
+        <span id="name"></span>
+        ，欢迎来到阿外云
+      </div>
+      <button id="logout" class="text-blue-500">退出</button>
+    </div>
+    <script>
+      document.getElementById('content').style.visibility = 'hidden';
+
+      document.getElementById('logout').addEventListener('click', function () {
+        localStorage.removeItem('xx-jwt-token');
+        location.reload();
+      });
+
+      if (localStorage.getItem('xx-jwt-token')) {
+        axios
+          .get('/userInfo', {
+            headers: { 'xx-jwt-token': localStorage.getItem('xx-jwt-token') },
+          })
+          .then((res) => {
+            if (res.data.username) {
+              document.getElementById('content').style.visibility = 'visible';
+              document.getElementById('login').style.display = 'none';
+              document.getElementById('name').innerHTML = res.data.username;
+            }
+          });
+      } else {
+        axios.get('/qrcode/generate').then((res) => {
+          document.getElementById('img').src = res.data.img;
+          queryStatus(res.data.qrcode_id);
+        });
+      }
+
+      function queryStatus(id) {
+        axios.get('/qrcode/check?id=' + id).then((res) => {
+          const status = res.data.status;
+
+          let content = '';
+          switch (status) {
+            case 'noscan':
+              content = '未扫码';
+              break;
+            case 'scan-wait-confirm':
+              content = '已扫码，等待确认';
+              break;
+            case 'scan-confirm':
+              content = '已确认，即将跳转';
+              break;
+            case 'scan-cancel':
+              content = '已取消';
+              break;
+          }
+          document.getElementById('info').textContent = content;
+
+          if (status === 'noscan' || status === 'scan-wait-confirm') {
+            setTimeout(() => queryStatus(id), 1000);
+          }
+          if (status === 'scan-confirm') {
+            window.localStorage.setItem('xx-jwt-token', res.data.token);
+            setTimeout(() => {
+              document.getElementById('login').style.display = 'none';
+              document.getElementById('content').style.visibility = 'visible';
+              document.getElementById('name').innerHTML = res.data.username;
+            }, 2000);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
