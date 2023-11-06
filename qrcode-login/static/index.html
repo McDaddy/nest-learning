@@ -13,7 +13,7 @@
       <img id="img" src="" alt="" />
       <div id="info"></div>
     </div>
-    <div id="content" class="flex items-center p-8 gap-4">
+    <div id="content" class="flex items-center p-8 gap-4 hidden">
       <div class="text-lg">
         你好，
         <span id="name"></span>
@@ -22,7 +22,7 @@
       <button id="logout" class="text-blue-500">退出</button>
     </div>
     <script>
-      document.getElementById('content').style.visibility = 'hidden';
+      
 
       document.getElementById('logout').addEventListener('click', function () {
         localStorage.removeItem('xx-jwt-token');
@@ -30,14 +30,14 @@
       });
 
       if (localStorage.getItem('xx-jwt-token')) {
+        document.getElementById('login').style.display = 'none';
         axios
           .get('/userInfo', {
             headers: { 'xx-jwt-token': localStorage.getItem('xx-jwt-token') },
           })
           .then((res) => {
             if (res.data.username) {
-              document.getElementById('content').style.visibility = 'visible';
-              document.getElementById('login').style.display = 'none';
+              document.getElementById('content').style.display = 'flex';
               document.getElementById('name').innerHTML = res.data.username;
             }
           });
@@ -76,7 +76,7 @@
             window.localStorage.setItem('xx-jwt-token', res.data.token);
             setTimeout(() => {
               document.getElementById('login').style.display = 'none';
-              document.getElementById('content').style.visibility = 'visible';
+              document.getElementById('content').style.display = 'flex';
               document.getElementById('name').innerHTML = res.data.username;
             }, 2000);
           }
