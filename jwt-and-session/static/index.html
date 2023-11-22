@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie测试</title>
+    <script src="https://unpkg.com/axios@1.5.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <button onclick="request()">设置三方cookie</button>
+    <button onclick="send()">发送三方请求</button>
+    <script>
+      function request() {
+        axios.get('https://a.mcdaddy.com:3000/setCookieB');
+      }
+      function send() {
+        axios.get('https://a.mcdaddy.com:3000/hello', {
+          withCredentials: true,
+        });
+      }
+    </script>
+  </body>
+</html>

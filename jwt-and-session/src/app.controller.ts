@@ -79,4 +79,38 @@ export class AppController {
       return 'Invalid username or password';
     }
   }
+
+  @Get('setCookie')
+  setCookie(@Res({ passthrough: true }) response: Response) {
+    response.cookie('testCookie', 'aaaa', {
+      domain: '.chenweitao.com',
+      sameSite: 'none',
+      secure: true,
+    });
+  }
+  // maxAge?: number | undefined;
+  //   signed?: boolean | undefined;
+  //   expires?: Date | undefined;
+  //   httpOnly?: boolean | undefined;
+  //   path?: string | undefined;
+  //   domain?: string | undefined;
+  //   secure?: boolean | undefined;
+  //   encode?: ((val: string) => string) | undefined;
+  //   sameSite?: boolean | 'lax' | 'strict' | 'none' | undefined;
+
+  @Get('setCookieB')
+  setCookieB(@Res({ passthrough: true }) response: Response) {
+    response.cookie('testCookieB', 'bbbb', {
+      domain: '.mcdaddy.com',
+      sameSite: 'lax',
+      secure: true,
+    });
+    response.write('xxxxxx');
+    response.end();
+  }
+
+  @Get('hello')
+  hello() {
+    return 'hello';
+  }
 }

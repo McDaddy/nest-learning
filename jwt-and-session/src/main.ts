@@ -1,9 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
+import * as fs from 'fs';
+import * as path from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    cert: fs.readFileSync(path.resolve(__dirname, './secrets/server.crt')),
+    key: fs.readFileSync(path.resolve(__dirname, './secrets/server.key')),
+  };
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    httpsOptions,
+  });
+  app.enableCors();
+  app.useStaticAssets('static', { prefix: '/pages' });
 
   app.use(
     session({
@@ -15,6 +26,6 @@ async function bootstrap() {
       saveUninitialized: false, // saveUninitalized 设置为 true 是不管是否设置 session，都会初始化一个空的 session 对象。比如你没有登录的时候，也会初始化一个 session 对象，这个设置为 false 就好。
     }),
   );
-  await app.listen(80);
+  await app.listen(3000);
 }
 bootstrap();
