@@ -1,0 +1,94 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type TeacherModel {
+  id: Float!
+  name: String!
+  course: CourseModel!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CourseModel {
+  id: Float!
+  name: String!
+  students: [StudentModel!]
+  teacher: [TeacherModel!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type StudentModel {
+  id: Float!
+  name: String!
+  sex: String!
+  age: Float!
+  courses: [CourseModel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CustomerModel {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  address: String!
+  invoices: [InvoiceModel!]
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Item {
+  description: String!
+  rate: Float!
+  quantity: Float!
+}
+
+type InvoiceModel {
+  id: String!
+  invoiceNo: String!
+  description: String!
+  customer: CustomerModel!
+  paymentStatus: String!
+  currency: String!
+  taxRate: Float!
+  issueDate: String!
+  dueDate: String!
+  note: String!
+  items: [Item!]!
+  taxAmount: Float!
+  subTotal: Float!
+  total: String!
+  amountPaid: Float!
+  outstandingBalance: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  student(id: Float!): StudentModel!
+  students: [StudentModel!]!
+  course(id: Float!): CourseModel!
+  courses: [CourseModel!]!
+  teacher(id: Float!): TeacherModel!
+  teachers: [TeacherModel!]!
+}
+
+type Mutation {
+  createStudent(name: String!, sex: String!, age: Float!): StudentModel!
+  createCourse(name: String!): CourseModel!
+  addStudents(courseWithStudents: AddStudentsDTO!): CourseModel!
+  createTeacher(name: String!, course: String!): TeacherModel!
+}
+
+input AddStudentsDTO {
+  id: Float!
+  studentIds: [Float!]!
+}
